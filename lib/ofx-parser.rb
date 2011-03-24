@@ -33,11 +33,20 @@ module OfxParser
     # * header as a hash,
     # * body as an evily pre-processed string ready for parsing by hpricot.
     def self.pre_process(ofx)
+      
       header, body = ofx.split(/\n{2,}|:?<OFX>/, 2)
+      
+      # jwl, 29/10/2008 - hack - commented out header processing as data not currently required
+      # also, ofx breaks on this line here if double quotes exist in the upload
+      # jrkw - added and updated 23/03/2011
 
-      header = Hash[*header.gsub(/^\r?\n+/,'').split(/\r\n/).collect do |e| 
-        e.split(/:/,2)
-      end.flatten]
+      # jrkw - these lines are not in the gem, but were in the vendored version - kept for prosterity and future testing
+      # header.gsub!(/\"/, '')
+      # body.gsub!(/\"/, '')
+      
+      # header = Hash[*header.gsub(/^\r?\n+/,'').split(/\r\n/).collect do |e| 
+      #   e.split(/:/,2)
+      # end.flatten]
 
       body.gsub!(/>\s+</m, '><')
       body.gsub!(/\s+</m, '<')
